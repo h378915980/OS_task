@@ -181,7 +181,7 @@ root_defined:
 	jmpi 0,SETUPSEG 	! 跳转到0x9020:0000(setup.s 程序的开始处)。
 						! 本程序到此就结束了。
 						
-! 下面是两个子程序。read—it用于读取磁盘上的system模块。kill—moter用于关闭软驱的马达。
+!read—it用于读取磁盘上的system模块。kill—moter用于关闭软驱的马达。
 
 ! This routine loads the system at address 0x10000, making sure
 ! no 64kB boundaries are crossed. We try to load it as fast as
@@ -321,7 +321,7 @@ bad_rt: mov ax,#0
 */
 ! 这个子程序用于关闭软驱的马达，这样我们进入内核后它处于已知状态，以后也就无须担心它了。
 
-! 下面第 235 行上的值 0x3I2 是软盘控制器的一个端口，被称为数字输出寄存器（DOR）端口。它是
+! 0x3I2 是软盘控制器的一个端口，被称为数字输出寄存器（DOR）端口。它是
 ! 一个 8 位的寄存器，其位 7––位 4 分别用于控制 4 个软驱（D––A）的启动和关闭。位 3––位 2 用于
 ! 允许/禁止 DMA 和中断请求以及启动/复位软盘控制器 FDC。 位 1––位 0 用于选择选择操作的软驱。
 ! 第 236 行上在 alDO 中设置并输出的 0 值，就是用于选择 A 驱动器，关闭 FDC，禁止 DMA 和中断请求，

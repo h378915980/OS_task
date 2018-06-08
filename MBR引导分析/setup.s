@@ -50,9 +50,7 @@ start:
 ! 下句将 ds 置成 INITSET(0x9000)。
 
 	mov ax,#INITSEG ! this is done in bootsect already, but...
-				! 将ds 置成#INITSEG(0x9000)。这已经在bootsect 程序中
-				! 设置过，但是现在是setup 程序，Linus 觉得需要再重新
-				! 设置一下。
+				! 将ds置成#INITSEG(0x9000)。
 	mov ds,ax
 	mov ah,#0x03 				! read cursor pos
 				! BIOS 中断0x10 的读光标功能号 ah = 0x03
@@ -62,7 +60,7 @@ start:
 	xor bh,bh
 	int 0x10 		! save it in known place, con_init fetches
 	mov [0],dx 		! it from 0x90000.
-				! 上两句是说将光标位置信息存放在0x90000 处，控制台
+				! 将光标位置信息存放在0x90000 处，控制台
 				! 初始化时会来取。
 
 ! Get memory size (extended mem, kB) 	
@@ -143,7 +141,7 @@ start:
 	mov dl,#0x81
 	int 0x13
 	jc no_disk1
-	cmp ah,#3 					! 是硬盘吗？
+	cmp ah,#3 					
 	je is_disk1
 no_disk1:
 	mov ax,#INITSEG 			! 第2个硬盘不存在，则对第2个硬盘表清零。
@@ -190,11 +188,9 @@ end_move:
 	mov ds,ax 						! ds 指向本程序(setup)段。
 	lidt idt_48 					! load idt with 0,0
 ! 加载中断描述符表(idt)寄存器，idt_48 是6 字节操作数的位置
-! (见218 行)。前2 字节表示idt 表的限长，后4 字节表示idt 表
-! 所处的基地址。
+! 前2 字节表示idt 表的限长，后4 字节表示idt 表所处的基地址。
 lgdt gdt_48 				! load gdt with whatever appropriate
-! 加载全局描述符表(gdt)寄存器，gdt_48 是6 字节操作数的位置
-! (见222 行)。
+! 加载全局描述符表(gdt)寄存器，gdt_48 是6 字节操作数的位置 )。
 
 ! that was painless, now we enable A20
 				! 以上的操作很简单，现在我们开启A20地址线。
@@ -218,7 +214,7 @@ lgdt gdt_48 				! load gdt with whatever appropriate
 ! rectify it afterwards. Thus the bios puts interrupts at 0x08-0x0f,
 ! which is used for the internal hardware interrupts as well. We just
 ! have to reprogram the 8259's, and it isn't fun.
-! 希望以上一切正常。现在我们必须重新对中断进行编程：-(我们将它们放在正好
+!现在我们必须重新对中断进行编程：-(我们将它们放在正好
 ! 处于Intel保留的硬件中断后面，即int 0x20-0x2F。在那里它们不会引起冲突。
 ! 不幸的是IBM在原PC机中搞糟了，以后也没有纠正过来。所以PC机BIOS把中断 
 ! 放在了 0x08-0x0f，这些中断也被用于内部硬件中断。所以我们就必须重新对8259 
@@ -272,7 +268,7 @@ lgdt gdt_48 				! load gdt with whatever appropriate
 	mov ax,#0x0001 			! protected mode (PE) bit 			! 保护模式比特位(PE)。
 	lmsw ax 				! This is it						! 就这样加载机器状态字				!
 	jmpi 0,8 				! jmp offset 0 of segment 8 (cs)	! 跳转至cs 段8，偏移0 处。
-				! 我们已经将system 模块移动到0x00000 开始的地方，所以这里的偏移地址是0。这里的段
+				! 将system 模块移动到0x00000 开始的地方，所以这里的偏移地址是0。这里的段
 				! 值的8 已经是保护模式下的段选择符了，用于选择描述符表和描述符表项以及所要求的特权级。
 				! 段选择符长度为16 位（2 字节）；位0-1 表示请求的特权级0-3，linux 操作系统只
 				! 用到两级：0 级（系统级）和3 级（用户级）；位2 用于选择全局描述符表(0)还是局部描
